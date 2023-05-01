@@ -26,7 +26,7 @@ const Keyboard = {
 
     this.elements.main.classList.add('keyboard', 'keyboard-hidden');
     this.elements.keysContainer.classList.add('keyboard-symbols');
-    this.elements.keysContainer.appendChild(this._createKeys());
+    this.elements.keysContainer.appendChild(this.createKeys());
 
     this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard-symbol');
 
@@ -36,13 +36,14 @@ const Keyboard = {
     document.querySelectorAll('.textarea').forEach((element) => {
       element.addEventListener('focus', () => {
         this.open(element.value, (currentValue) => {
+          /* eslint-disable-next-line */
           element.value = currentValue;
         });
       });
     });
   },
 
-  _createKeys() {
+  createKeys() {
     const fragment = document.createDocumentFragment();
     const keyLayout = [
       'close',
@@ -66,8 +67,11 @@ const Keyboard = {
           keyElement.classList.add('keyboard-symbol-large');
           keyElement.innerHTML = createName('backspace');
           keyElement.addEventListener('click', () => {
-            this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
-            this._triggerEvent('oninput');
+            this.properties.value = this.properties.value.substring(
+              0,
+              this.properties.value.length - 1,
+            );
+            this.triggerEvent('oninput');
           });
           break;
 
@@ -80,7 +84,7 @@ const Keyboard = {
           keyElement.classList.add('keyboard-symbol-large', 'keyboard-symbol-activatable');
           keyElement.innerHTML = createName('caps');
           keyElement.addEventListener('click', () => {
-            this._toggleCapsLock();
+            this.toggleCapsLock();
             keyElement.classList.toggle('keyboard-symbol-active', this.properties.capsLock);
           });
           break;
@@ -90,7 +94,7 @@ const Keyboard = {
           keyElement.innerHTML = createName('enter');
           keyElement.addEventListener('click', () => {
             this.properties.value += '\n';
-            this._triggerEvent('oninput');
+            this.triggerEvent('oninput');
           });
           break;
 
@@ -107,7 +111,7 @@ const Keyboard = {
           keyElement.innerHTML = createName('tab');
           keyElement.addEventListener('click', () => {
             this.properties.value += '  ';
-            this._triggerEvent('oninput');
+            this.triggerEvent('oninput');
           });
           break;
 
@@ -124,7 +128,7 @@ const Keyboard = {
           keyElement.classList.add('keyboard-symbol-big');
           keyElement.addEventListener('click', () => {
             this.properties.value += ' ';
-            this._triggerEvent('oninput');
+            this.triggerEvent('oninput');
           });
           break;
 
@@ -133,15 +137,16 @@ const Keyboard = {
           keyElement.innerHTML = createName('close');
           keyElement.addEventListener('click', () => {
             this.close();
-            this._triggerEvent('onclose');
+            this.triggerEvent('onclose');
           });
           break;
 
         default:
           keyElement.textContent = key.toLowerCase();
           keyElement.addEventListener('click', () => {
-            this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
-            this._triggerEvent('oninput');
+            this.properties.value += this.properties.capsLock ? key.toUpperCase()
+              : key.toLowerCase();
+            this.triggerEvent('oninput');
           });
           break;
       }
@@ -155,18 +160,19 @@ const Keyboard = {
     return fragment;
   },
 
-  _triggerEvent(handlerName) {
+  triggerEvent(handlerName) {
     if (typeof this.eventHandlers[handlerName] === 'function') {
       this.eventHandlers[handlerName](this.properties.value);
     }
   },
 
-  _toggleCapsLock() {
+  toggleCapsLock() {
     this.properties.capsLock = !this.properties.capsLock;
-
+    /* eslint-disable-next-line */
     for (const key of this.elements.keys) {
       if (key.childElementCount === 0) {
-        key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+        key.textContent = this.properties.capsLock ? key.textContent.toUpperCase()
+          : key.textContent.toLowerCase();
       }
     }
   },
