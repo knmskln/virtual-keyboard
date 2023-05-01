@@ -1,7 +1,7 @@
 {
   "name": "virtual-keyboard",
   "version": "1.0.0",
-  "script": {
+  "scripts": {
     "lint:fix": "npx eslint ./ --fix"
   },
   "devDependencies": {
